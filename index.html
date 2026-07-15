@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VR Signs</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+        <link rel="manifest" href="/static/site.webmanifest">
+        <style>
+            body { font-family: Arial; text-align: center; margin-top: 50px; background-color: #222; color: white; }
+            .box { padding: 20px; background: #333; border-radius: 15px; display: inline-block; }
+            #Canvas { background-color: #EEE;height: 38em;width: 38em;}
+        /* .lbl {display: flex;align-items: center;justify-content: space-around;} */
+        </style>
+    </head>
+<body>
+    <div style="display: flex; flex-flow: column; justify-content: center;">
+        <div style="display: flex; justify-content: space-around;">
+            <canvas id="Canvas"></canvas>
+            <div>
+            <div style="display: flex;align-items: center;justify-content: space-between; width: 10em;" id="data">
+                <div style="width: 3em;">
+                <label class="lbl"> id :</label>
+                <input id="dataid"style="width: 3em;" class="lbl"></input>
+                </div>
+                <div style="width: 3em;">
+                <label class="lbl"> x :</label>
+                <input id="datax" style="width: 3em;" class="lbl"></input>
+                </div>
+                <br>
+                <div style="width: 3em;">
+                <label class="lbl"> y :</label>
+                <input id="datay" style="width: 3em;" class="lbl"></input>
+                </div>
+                <br>
+                <div style="width: 3em;">
+                <label class="lbl"> z :</label>
+                <input id="dataz"style="width: 3em;" class="lbl"></input>
+                </div>
+                </div>
+                <br>
+                <div id="list">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th scope="col" style="width: 3em;">id</th>
+                            <th scope="col" style="width: 3em;"> X :</th>
+                            <th scope="col" style="width: 3em;"> Y :</th>
+                            <th scope="col" style="width: 3em;"> Z :</th>
+                            <th scope="col" style="width: 3em;"> del </th>
+                            </tr>
+                            <tbody>
+
+                            </tbody>
+                        </thead>
+                    </table>
+                </div>
+                <br>
+                <button id="send"> send </button>
+            </div>
+        </div>
+        </div>
+</body>
+    <script src="Signs.js"></script>
+</html>
