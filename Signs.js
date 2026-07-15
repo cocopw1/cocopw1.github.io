@@ -298,7 +298,7 @@ if (canvas) {
   
   const sendBtn = document.getElementById('send');
   if (sendBtn) {
-    // sendBtn.addEventListener('click', async () => {
+    sendBtn.addEventListener('click', async () => {
     //   try {
     //     sendBtn.disabled = true;
     //     const payload = points.map(pt => ({ id: pt.id, x: pt.x, y: pt.y, z: pt.z }));
@@ -319,8 +319,9 @@ if (canvas) {
     //   } finally {
     //     sendBtn.disabled = false;
     //   }
-    // });
-      alert('demo version no connection to database');
+    
+        alert('demo version no connection to database');
+      });
   }
 
   async function fetchData() {
