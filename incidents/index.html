@@ -1,0 +1,198 @@
+cocopw
+cocopw
+Online
+
+cocopw [EBTV],  — 7/14/2026 2:13 PM
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VR Signs</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+
+Signs.html
+3 KB
+const canvas = document.querySelector('#Canvas');
+const dataid = document.querySelector('#dataid');
+const datax = document.querySelector('#datax');
+const datay = document.querySelector('#datay');
+const dataz = document.querySelector('#dataz');
+let id = 0;
+
+Signs.js
+11 KB
+Gimbest — 7/14/2026 2:29 PM
+https://172.16.180.149:5000/
+cocopw [EBTV],  — 7/14/2026 2:40 PM
+@app.route('/signs/data', methods=["POST"])
+def postSigns():
+  """Accept either a single point object {x,y,z} or an array of points.
+  Before inserting, clear the `Signs` table so the new dataset replaces the old one.
+  """
+  data = request.get_json()
+  try:
+    # clear table first (use DELETE for portability)
+    cur.execute("DELETE FROM Signs;")
+
+    # normalize to array
+    items = data if isinstance(data, list) else [data]
+
+    insert_sql = "INSERT INTO Signs (X, Y, Z) VALUES (%s, %s, %s);"
+    for item in items:
+      # accept lowercase keys `x,y,z` or uppercase `X,Y,Z`
+      x = item.get('x', item.get('X'))
+      y = item.get('y', item.get('Y'))
+      z = item.get('z', item.get('Z', 0))
+      cur.execute(insert_sql, (x, y, z))
+
+    conn.commit()
+    return {"status": "success", "message": "Signs replaced successfully"}, 201
+
+  except Exception as e:
+    conn.rollback()
+    print(f"Erreur lors de l'insertion : {e}")
+    return {"status": "error", "message": str(e)}, 500
+cocopw [EBTV],  — 7/15/2026 5:05 AM
+67
+Gimbest — 7/15/2026 5:20 AM
+Huh
+Gimbest — 7/15/2026 2:49 PM
+https://test.ggimenez.fr:5000/signs
+cocopw [EBTV],  — Yesterday at 11:50 AM
+https://les-aides.paysdelaloire.fr/account-management/prod-demandeurs/ux/#/login?redirectTo=https:%2F%2Fles-aides.paysdelaloire.fr%2Faides%2F%23%2Fprod%2Fconnecte%2Ftiers-selection&jwtKey=jwt-prod-portail-depot-demande-aides&footer=https:%2F%2Fles-aides.paysdelaloire.fr%2Faides%2F%23%2Fprod%2Fmentions-legales,Mentions%20légales,_self
+cocopw [EBTV],  — Yesterday at 4:22 PM
+from flask import Blueprint, jsonify, request, render_template
+from database import cur, conn
+
+incidents = Blueprint('incidents', __name__)
+
+@incidents.route('/incidents/data', methods=["GET"])
+def getIncidents():
+    cur.execute("SELECT ST_X(localisation) as longitude, ST_Y(localisation) as latitude FROM dangerous_zones")
+    raw_results = cur.fetchall()
+    clean_results = []
+    for row in raw_results:
+        clean_results.append({
+            "lon": row[1],
+            "lat": row[2]
+        })
+    print(f"{len(clean_results)} results found")
+    return jsonify(clean_results)
+
+
+@incidents.route('/incidents/data', methods=["POST"])
+def postIncidents():
+  data = request.get_json()
+  try:
+    cur.execute("DELETE FROM dangerous_zones;")
+
+    items = data if isinstance(data, list) else [data]
+
+    insert_sql ="INSERT INTO dangerous_zones (title, description, localisation) VALUES ('from map' ,'from map' , ST_SetSRID(ST_MakePoint(%s, %s), 4326));";
+    for item in items:
+      lat = item.get('lat', item.get('LAT'))
+      lon = item.get('lon', item.get('LON'))
+      cur.execute(insert_sql, (lon, lat))
+
+    conn.commit()
+    return {"status": "success", "message": "Signs replaced successfully"}, 201
+
+  except Exception as e:
+    conn.rollback()
+    print(f"Error while inserting : {e}")
+    return {"status": "error", "message": str(e)}, 500
+    
+@incidents.route('/incidents', methods=["GET"])
+def getIncidentsPage():
+    return render_template('addIncid.html')
+ 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VR Indidents</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+
+addIncid.html
+4 KB
+const canvas = document.querySelector('#Canvas');
+const dataid = document.querySelector('#dataid');
+const datax = document.querySelector('#datax');
+const datay = document.querySelector('#datay');
+const mapIframe = document.getElementById('osm-frame');
+
+incin.js
+15 KB
+﻿
+Gimbest
+gimbest
+ 
+ 
+J'aime pas le camembert
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VR Indidents</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+        <link rel="manifest" href="/static/site.webmanifest">
+        <style>
+            body { font-family: Arial; text-align: center; margin-top: 50px; background-color: #222; color: white; }
+            .box { padding: 20px; background: #333; border-radius: 15px; display: inline-block; }
+           
+        /* .lbl {display: flex;align-items: center;justify-content: space-around;} */
+        </style>
+    </head>
+<body>
+    <div style="display: flex; flex-flow: column; justify-content: center;">
+        <div style="display: flex; justify-content: space-around;">
+            <div>
+                <div style="z-index: 0; position: absolute;">
+                    <iframe id="osm-frame" src="https://www.openstreetmap.org/export/embed.html?bbox=139.4595%2C35.6285%2C139.4685%2C35.6345&layer=mapnik&marker=35.63131%2C139.46457" width="600" height="400" title="OpenStreetMap"></iframe>
+                </div>
+                <div style="z-index: 5; height: 400px; width: 600px; position: absolute;">
+                    <canvas id="Canvas" style="height: 400px; width: 600px;"></canvas>
+                </div>
+            </div>
+            <div style="margin-top: 420px; text-align: left; color: black; background: rgba(255,255,255,0.9); padding: 12px; border-radius: 12px; position: relative; z-index: 10; width: 620px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; flex-direction: column; width: 6em;">
+                        <label for="dataid">id :</label>
+                        <input id="dataid" style="width: 100%;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 6em;">
+                        <label for="datax">lon :</label>
+                        <input id="datax" style="width: 100%;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 6em;">
+                        <label for="datay">lat :</label>
+                        <input id="datay" style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+                <br>
+                <div id="list">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th scope="col" style="width: 3em;">id</th>
+                            <th scope="col" style="width: 3em;"> lon :</th>
+                            <th scope="col" style="width: 3em;"> lat :</th>
+                            <th scope="col" style="width: 3em;"> del </th>
+                            </tr>
+                            <tbody>
+
+                            </tbody>
+                        </thead>
+                    </table>
+                </div>
+                <br>
+                <button id="send"> send </button>
+            </div>
+        </div>
+        </div>
+</body>
+    <script src="incin.js"></script>
+</html>
