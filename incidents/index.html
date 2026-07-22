@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VR Indidents</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+        <link rel="manifest" href="/static/site.webmanifest">
+        <style>
+            body { font-family: Arial; text-align: center; margin-top: 50px; background-color: #222; color: white; }
+            .box { padding: 20px; background: #333; border-radius: 15px; display: inline-block; }
+           
+        /* .lbl {display: flex;align-items: center;justify-content: space-around;} */
+        </style>
+    </head>
+<body>
+    <div style="display: flex; flex-flow: column; justify-content: center;">
+        <div style="display: flex; justify-content: space-around;">
+            <div>
+                <div style="z-index: 0; position: absolute;">
+                    <iframe id="osm-frame" src="https://www.openstreetmap.org/export/embed.html?bbox=139.4595%2C35.6285%2C139.4685%2C35.6345&layer=mapnik&marker=35.63131%2C139.46457" width="600" height="400" title="OpenStreetMap"></iframe>
+                </div>
+                <div style="z-index: 5; height: 400px; width: 600px; position: absolute;">
+                    <canvas id="Canvas" style="height: 400px; width: 600px;"></canvas>
+                </div>
+            </div>
+            <div style="margin-top: 420px; text-align: left; color: black; background: rgba(255,255,255,0.9); padding: 12px; border-radius: 12px; position: relative; z-index: 10; width: 620px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; flex-direction: column; width: 6em;">
+                        <label for="dataid">id :</label>
+                        <input id="dataid" style="width: 100%;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 6em;">
+                        <label for="datax">lon :</label>
+                        <input id="datax" style="width: 100%;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 6em;">
+                        <label for="datay">lat :</label>
+                        <input id="datay" style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+                <br>
+                <div id="list">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th scope="col" style="width: 3em;">id</th>
+                            <th scope="col" style="width: 3em;"> lon :</th>
+                            <th scope="col" style="width: 3em;"> lat :</th>
+                            <th scope="col" style="width: 3em;"> del </th>
+                            </tr>
+                            <tbody>
+
+                            </tbody>
+                        </thead>
+                    </table>
+                </div>
+                <br>
+                <button id="send"> send </button>
+            </div>
+        </div>
+        </div>
+</body>
+    <script src="incin.js"></script>
+</html>
